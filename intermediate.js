@@ -7,12 +7,17 @@ function filterDuplicates(inputArray){
 console.log(filterDuplicates(["John", "Taylor", "John"]));
 
 function decendingSort(inputNumber){
-    let numberArray = inputNumber.toString().split("");
+    let numberString = inputNumber.toString();
+    let numberArray = numberString.split("");
     let sortedArray = numberArray.sort();
     let sortedDecArray = sortedArray.reverse();
-    let sortedString = sortedDecArray.toString("");
+    let sortedString = sortedDecArray.join("");
     let sortedNum = parseInt(sortedString);
     return sortedNum;
 }
 
 console.log(decendingSort(5732547));
+
+function validEmail(){
+    
+}
