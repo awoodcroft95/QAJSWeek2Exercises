@@ -18,6 +18,13 @@ function decendingSort(inputNumber){
 
 console.log(decendingSort(5732547));
 
-function validEmail(){
-    
+function validEmail(emailString){
+    let dotCom = false;
+    let atSymbol = false;
+    let 
+    if (_.endsWith(emailString, ".com")) {
+        dotCom = true;
+    } else if (emailString == "check for @ symbol"){
+
+    }
 }
