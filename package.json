@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/awoodcroft95/QAJSWeek2Exercises/issues"
   },
-  "homepage": "https://github.com/awoodcroft95/QAJSWeek2Exercises#readme"
+  "homepage": "https://github.com/awoodcroft95/QAJSWeek2Exercises#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "expresss": "0.0.0"
+  }
 }
