@@ -1,0 +1,20 @@
+{
+  "name": "QAJSWeek2Exercises",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awoodcroft95/QAJSWeek2Exercises.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/awoodcroft95/QAJSWeek2Exercises/issues"
+  },
+  "homepage": "https://github.com/awoodcroft95/QAJSWeek2Exercises#readme"
+}
