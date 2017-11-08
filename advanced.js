@@ -18,9 +18,32 @@ fillLootSack(30, itemArray);
 function fillLootSack(size, items) {
     let spaceLeft = size;
     let isSpaceLeft = true;
-    while (isSpaceLeft){
-        for (let item in items){
-            
+    let lootSack = { capacity: size, bagItems: [], weight: 0, value: 0 };
+    while (isSpaceLeft) {
+        let tempRemove = [];
+        let itemsRemove = [];
+        if (lootSack.weight < lootSack.capacity) {
+            for (let item in items) {
+                lootSack.bagItems.push(item);
+                itemsRemove.push(item);
+            }
+            items = _.difference(items, itemsRemove);
+        } else if (lootSack.weight = lootSack.capacity) {
+            isSpaceLeft = false;
+        } else if (lootSack.weight > lootSack.capacity) {
+            // remove the smallest item;
         }
+        
+        for (let storedItem in lootSack.bagItems) {
+            for (let item in items) {
+                if (storedItem.weight === item.weight) {
+                    if (storedItem.value < item.value) {
+                        tempRemove.push(storedItem);
+                        lootSack.bagItems.push(item);
+                    }
+                }
+            }
+        }
+        lootSack.bagItems = _.difference(lootSack.bagItems, tempRemove);
     }
 }
