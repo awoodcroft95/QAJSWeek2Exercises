@@ -11,31 +11,65 @@ class App extends Component {
           <h1 className="App-title">STAR WARS SHIP API</h1>
         </header>
         <div>
-        <input id="inputShipName" type="text" placeholder="Enter a name"></input><br></br>
-        <input id="inputShipSpeed" type="number" placeholder="Enter a speed"></input><br></br>
-        <input id="inputShipCrew" type="number" placeholder="Enter minimum crew size"></input><br></br>
-        <input id="inputShipLength" type="number" placeholder="Enter ship length"></input><br></br>
-        <input id="inputShipPassengers" type="number" placeholder="Enter max number of passengers"></input><br></br>
-        <input type="button" onclick="createAndAppendDog()" value="Create"></input>
-        <input type="button" onclick="updateAndAppendDog()" value="Update"></input><br></br>
-        <div id="idStore" value=""></div>
+          <input id="inputShipName" type="text" placeholder="Enter a name"></input>
+          <br></br>
+          <input id="inputShipSpeed" type="number" placeholder="Enter a speed"></input>
+          <br></br>
+          <input id="inputShipCrew" type="number" placeholder="Enter minimum crew size"></input>
+          <br></br>
+          <input id="inputShipLength" type="number" placeholder="Enter ship length"></input>
+          <br></br>
+          <input
+            id="inputShipPassengers"
+            type="number"
+            placeholder="Enter max number of passengers"></input>
+          <br></br>
+          <input type="button" onclick="createAndAppendDog()" value="Create"></input>
+          <input type="button" onclick="updateAndAppendDog()" value="Update"></input>
+          <br></br>
+          <div id="idStore" value=""></div>
         </div>
-        <div class="animate-bottom">
-          <table id="shipTable">
-            <h2>Ships</h2>
-            <table>
-              <thead>
-                <th>Name</th>
-                <th>Speed</th>
-                <th>Minimum Crew</th>
-                <th>Length</th>
-                <th>Passengers</th>
-              </thead>
-              <tbody id="shipDetails"></tbody>
-            </table>
-          </table>
-        </div>
+        <Table/>
       </div>
+
+    );
+  }
+}
+
+class Table extends Component {
+  render() {
+    return (
+      <div class="animate-bottom">
+        <table id="shipTable">
+          <h2>Ships</h2>
+          <table>
+            <thead>
+              <th>Name</th>
+              <th>Speed</th>
+              <th>Minimum Crew</th>
+              <th>Length</th>
+              <th>Passengers</th>
+            </thead>
+            <tbody id="shipDetails">
+              <TableData/>
+            </tbody>
+          </table>
+        </table>
+      </div>
+    );
+  }
+}
+
+class TableData extends Component {
+  render() {
+    return (
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
     );
   }
 }
