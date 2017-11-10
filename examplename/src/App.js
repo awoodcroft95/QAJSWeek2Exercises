@@ -5,19 +5,50 @@ import ReactDOM from 'react-dom';
 import Ship from './Ship';
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      objArray :[
+        {
+          id: 0,
+          name: "X-Wing",
+          speed: 1050,
+          minCrew: 1,
+          length: 12,
+          passengers: 1
+        }, {
+          id: 1,
+          name: "Millennium Falcon",
+          speed: 1050,
+          minCrew: 1,
+          length: 34.37,
+          passengers: 6
+        }
+      ]
+    }
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo"/>
-          <h1 className="App-title">STAR WARS SHIP API</h1>
-        </header>
-        <Inputs />
-        <Table tData={this.props.tData}/>
+        <Header/>
+        <Inputs/>
+        <Table tDataProp={this.state.objArray}/>
       </div>
 
     );
   }
+}
+
+class Header extends Component {
+  render() {
+    return (
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo"/>
+        <h1 className="App-title">STAR WARS SHIP API</h1>
+      </header>
+    );
+  };
 }
 
 class Inputs extends Component {
@@ -42,8 +73,8 @@ class Inputs extends Component {
         <br></br>
         <div id="idStore" value=""></div>
       </div>
-    )
-  }
+    );
+  };
 }
 
 class Table extends Component {
@@ -53,7 +84,7 @@ class Table extends Component {
       <tbody id="shipDetails">
         {this
           .props
-          .tData
+          .tDataProp
           .map((ship, index) => {
             return (<Ship
               name={ship.name}
