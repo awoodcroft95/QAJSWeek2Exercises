@@ -12,29 +12,37 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo"/>
           <h1 className="App-title">STAR WARS SHIP API</h1>
         </header>
-        <div>
-          <input id="inputShipName" type="text" placeholder="Enter a name"></input>
-          <br></br>
-          <input id="inputShipSpeed" type="number" placeholder="Enter a speed"></input>
-          <br></br>
-          <input id="inputShipCrew" type="number" placeholder="Enter minimum crew size"></input>
-          <br></br>
-          <input id="inputShipLength" type="number" placeholder="Enter ship length"></input>
-          <br></br>
-          <input
-            id="inputShipPassengers"
-            type="number"
-            placeholder="Enter max number of passengers"></input>
-          <br></br>
-          <input type="button" onclick="createAndAppendDog()" value="Create"></input>
-          <input type="button" onclick="updateAndAppendDog()" value="Update"></input>
-          <br></br>
-          <div id="idStore" value=""></div>
-        </div>
+        <Inputs />
         <Table tData={this.props.tData}/>
       </div>
 
     );
+  }
+}
+
+class Inputs extends Component {
+  render() {
+    return (
+      <div>
+        <input id="inputShipName" type="text" placeholder="Enter a name"></input>
+        <br></br>
+        <input id="inputShipSpeed" type="number" placeholder="Enter a speed"></input>
+        <br></br>
+        <input id="inputShipCrew" type="number" placeholder="Enter minimum crew size"></input>
+        <br></br>
+        <input id="inputShipLength" type="number" placeholder="Enter ship length"></input>
+        <br></br>
+        <input
+          id="inputShipPassengers"
+          type="number"
+          placeholder="Enter max number of passengers"></input>
+        <br></br>
+        <input type="button" onclick="createShip()" value="Create"></input>
+        <input type="button" onclick="updateShip()" value="Update"></input>
+        <br></br>
+        <div id="idStore" value=""></div>
+      </div>
+    )
   }
 }
 
