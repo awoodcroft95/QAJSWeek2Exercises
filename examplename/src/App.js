@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import logo from './Redstarbird.png';
 import './App.css';
+import ReactDOM from 'react-dom';
+import Ship from './Ship';
 
 class App extends Component {
   render() {
@@ -29,7 +31,7 @@ class App extends Component {
           <br></br>
           <div id="idStore" value=""></div>
         </div>
-        <Table/>
+        <Table tData={this.props.tData}/>
       </div>
 
     );
@@ -38,6 +40,22 @@ class App extends Component {
 
 class Table extends Component {
   render() {
+    let ships = null;
+    ships = (
+      <tbody id="shipDetails">
+        {this
+          .props
+          .tData
+          .map((ship, index) => {
+            return (<Ship
+              name={ship.name}
+              speed={ship.speed}
+              minCrew={ship.minCrew}
+              length={ship.length}
+              passengers={ship.passengers}/>)
+          })}
+      </tbody>
+    )
     return (
       <div class="animate-bottom">
         <table id="shipTable">
@@ -50,28 +68,11 @@ class Table extends Component {
               <th>Length</th>
               <th>Passengers</th>
             </thead>
-            <tbody id="shipDetails">
-              <TableData/>
-            </tbody>
+            {ships}
           </table>
         </table>
       </div>
     );
   }
 }
-
-class TableData extends Component {
-  render() {
-    return (
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-    );
-  }
-}
-
 export default App;
