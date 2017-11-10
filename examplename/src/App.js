@@ -8,7 +8,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      objArray :[
+      objArray: [
         {
           id: 0,
           name: "X-Wing",
@@ -52,10 +52,41 @@ class Header extends Component {
 }
 
 class Inputs extends Component {
+
+  constructor(props) {
+    super(props);
+
+    //Each form component will call this method to update the state
+    this.handleChange = (valueName) => (event) => this.setState({[valueName]: event.target.value});
+
+    // Submit on the child form component will push all data in the state of the
+    // child component up to the parent component
+    this.handleSubmit = (e) => {
+      e.preventDefault();
+      this
+        .props
+        .onSubmit(this.state);
+      this.setState({myData: ""});
+    }
+    //Initialize state
+    this.state = {
+      nameData: "",
+      speedData: "",
+      minCrewData: "",
+      lengthData: "",
+      passengersData: ""
+    };
+  }
+
   render() {
     return (
       <div>
-        <input id="inputShipName" type="text" placeholder="Enter a name"></input>
+        <input
+          id="inputShipName"
+          type="text"
+          placeholder="Enter a name"
+          value={this.state.nameData}
+          onChange={this.handleChange("nameData")}></input>
         <br></br>
         <input id="inputShipSpeed" type="number" placeholder="Enter a speed"></input>
         <br></br>
@@ -101,11 +132,13 @@ class Table extends Component {
           <h2>Ships</h2>
           <table>
             <thead>
+              <th>Delete</th>
               <th>Name</th>
               <th>Speed</th>
               <th>Minimum Crew</th>
               <th>Length</th>
               <th>Passengers</th>
+              <th>Update</th>
             </thead>
             {ships}
           </table>
