@@ -3,13 +3,13 @@ import React from 'react';
 const ship = (props) => {
     return (
             <tr>
-                <td> <a href = "#" data-id={props.id} class="deleteShip"> X </a> </td>
+                <td> <button value={props.id} class="deleteShip" onClick={props.handleDeleteRow}> X </button> </td>
                 <td>{props.name}</td>
                 <td>{props.speed}</td>
                 <td>{props.minCrew}</td>
                 <td>{props.length}</td>
                 <td>{props.passengers}</td>
-                <td> <a href = "#" data-id={props.id} class="updateShip"> U </a> </td>
+                <td> <button value={props.id} class="updateShip" onClick={props.handleUpdateRow}> U </button> </td>
             </tr>
     )
 }

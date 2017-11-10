@@ -24,7 +24,55 @@ class App extends Component {
           length: 34.37,
           passengers: 6
         }
-      ]
+      ],
+      rowData: {
+        nameData: "",
+        speedData: "",
+        minCrewData: "",
+        lengthData: "",
+        passengersData: ""
+      }
+    }
+
+    this.handleSubmitInParent = (dataFromForm) => {
+      let array = this.state.objArray;
+      array.push({
+        id: array.length,
+        name: dataFromForm.nameData,
+        speed: dataFromForm.speedData,
+        minCrew: dataFromForm.minCrewData,
+        length: dataFromForm.lengthData,
+        passengers: dataFromForm.passengersData
+      });
+      this.setState({array});
+    }
+
+    this.handleDeleteRowInParent = (idToDelete) => {
+      let array = this.state.objArray;
+      let objIndex = array.findIndex((e) => e.id === idToDelete);
+      array.splice(objIndex, 1);
+      this.setState({objArray: array});
+    }
+
+    this.handleUpdateRowInParent = (idToUpdate, dataFromForm) => {
+      let array = this.state.objArray;
+      let objIndex = array.findIndex((e) => e.id === idToUpdate);
+      let replacementObj = {
+        id: idToUpdate,
+        name: dataFromForm.nameData,
+        speed: dataFromForm.speedData,
+        minCrew: dataFromForm.minCrewData,
+        length: dataFromForm.lengthData,
+        passengers: dataFromForm.passengersData
+      }
+      array.splice(objIndex, 1);
+      this.setState({objArray: array});
+    }
+
+    this.handleGetRowData = (idToUpdate) => {
+      let array = this.state.objArray;
+      let objIndex = array.find((e) => e.id === idToUpdate);
+      this.setState({rowData: objIndex});
     }
   }
 
@@ -32,8 +80,10 @@ class App extends Component {
     return (
       <div className="App">
         <Header/>
-        <Inputs/>
-        <Table tDataProp={this.state.objArray}/>
+        <Inputs parentHandle={this.handleSubmitInParent}/>
+        <Table
+          tDataProp={this.state.objArray}
+          handleDeleteRowInParent={this.handleDeleteRowInParent} handleGetRowData={this.handleGetRowData}/>
       </div>
 
     );
@@ -65,8 +115,8 @@ class Inputs extends Component {
       e.preventDefault();
       this
         .props
-        .onSubmit(this.state);
-      this.setState({myData: ""});
+        .parentHandle(this.state);
+      this.setState({nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: ""});
     }
     //Initialize state
     this.state = {
@@ -88,18 +138,35 @@ class Inputs extends Component {
           value={this.state.nameData}
           onChange={this.handleChange("nameData")}></input>
         <br></br>
-        <input id="inputShipSpeed" type="number" placeholder="Enter a speed"></input>
+        <input
+          id="inputShipSpeed"
+          type="number"
+          placeholder="Enter a speed"
+          value={this.state.speedData}
+          onChange={this.handleChange("speedData")}></input>
         <br></br>
-        <input id="inputShipCrew" type="number" placeholder="Enter minimum crew size"></input>
+        <input
+          id="inputShipCrew"
+          type="number"
+          placeholder="Enter minimum crew size"
+          value={this.state.minCrewData}
+          onChange={this.handleChange("minCrewData")}></input>
         <br></br>
-        <input id="inputShipLength" type="number" placeholder="Enter ship length"></input>
+        <input
+          id="inputShipLength"
+          type="number"
+          placeholder="Enter ship length"
+          value={this.state.lengthData}
+          onChange={this.handleChange("lengthData")}></input>
         <br></br>
         <input
           id="inputShipPassengers"
           type="number"
-          placeholder="Enter max number of passengers"></input>
+          placeholder="Enter max number of passengers"
+          value={this.state.passengersData}
+          onChange={this.handleChange("passengersData")}></input>
         <br></br>
-        <input type="button" onclick="createShip()" value="Create"></input>
+        <input type="button" onClick={this.handleSubmit} value="Create"></input>
         <input type="button" onclick="updateShip()" value="Update"></input>
         <br></br>
         <div id="idStore" value=""></div>
@@ -109,6 +176,27 @@ class Inputs extends Component {
 }
 
 class Table extends Component {
+  constructor() {
+    super();
+
+    this.handleDeleteRow = (e) => {
+      e.preventDefault();
+      let eventAtID = e.target.value;
+      this
+        .props
+        .handleDeleteRowInParent(eventAtID);
+      //delete row with id that this event occurs at remove that data from the state
+    }
+
+    this.handleUpdateRow = (e) => {
+      e.preventDefault();
+      let eventAtID = e.target.value;
+      this
+        .props
+        .handleGetRowData(eventAtID);
+    }
+
+  }
   render() {
     let ships = null;
     ships = (
@@ -118,11 +206,13 @@ class Table extends Component {
           .tDataProp
           .map((ship, index) => {
             return (<Ship
+              id={ship.id}
               name={ship.name}
               speed={ship.speed}
               minCrew={ship.minCrew}
               length={ship.length}
-              passengers={ship.passengers}/>)
+              passengers={ship.passengers}
+              handleDeleteRow={this.handleDeleteRow}/>)
           })}
       </tbody>
     )
@@ -147,4 +237,5 @@ class Table extends Component {
     );
   }
 }
+
 export default App;
