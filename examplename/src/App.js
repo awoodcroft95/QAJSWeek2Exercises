@@ -67,10 +67,12 @@ class App extends Component {
       }
       array.splice(objIndex, 1);
       this.setState({objArray: array});
+      //update api
     }
 
     this.handleGetRowData = (idToUpdate) => {
       let array = this.state.objArray;
+      //get from api
       let objIndex = array.find((e) => e.id === idToUpdate);
       this.setState({rowData: objIndex});
     }
@@ -167,7 +169,7 @@ class Inputs extends Component {
           onChange={this.handleChange("passengersData")}></input>
         <br></br>
         <input type="button" onClick={this.handleSubmit} value="Create"></input>
-        <input type="button" onclick="updateShip()" value="Update"></input>
+        <input type="button" onClick="updateShip()" value="Update"></input>
         <br></br>
         <div id="idStore" value=""></div>
       </div>
@@ -212,7 +214,8 @@ class Table extends Component {
               minCrew={ship.minCrew}
               length={ship.length}
               passengers={ship.passengers}
-              handleDeleteRow={this.handleDeleteRow}/>)
+              handleDeleteRow={this.handleDeleteRow}
+              handleUpdateRow={this.handleUpdateRow}/>)
           })}
       </tbody>
     )
