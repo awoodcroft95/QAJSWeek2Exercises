@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import logo from './Redstarbird.png';
 import './App.css';
 import ReactDOM from 'react-dom';
@@ -31,7 +31,8 @@ class App extends Component {
         minCrewData: "",
         lengthData: "",
         passengersData: ""
-      }
+      },
+      idOfEdit: { value: -1 }
     }
 
     this.handleSubmitInParent = (dataFromForm) => {
@@ -44,14 +45,14 @@ class App extends Component {
         length: dataFromForm.lengthData,
         passengers: dataFromForm.passengersData
       });
-      this.setState({array});
+      this.setState({ array });
     }
 
     this.handleDeleteRowInParent = (idToDelete) => {
       let array = this.state.objArray;
       let objIndex = array.findIndex((e) => e.id === idToDelete);
       array.splice(objIndex, 1);
-      this.setState({objArray: array});
+      this.setState({ objArray: array });
     }
 
     this.handleUpdateRowInParent = (idToUpdate, dataFromForm) => {
@@ -66,26 +67,44 @@ class App extends Component {
         passengers: dataFromForm.passengersData
       }
       array.splice(objIndex, 1);
-      this.setState({objArray: array});
+      this.setState({ objArray: array });
       //update api
     }
 
     this.handleGetRowData = (idToUpdate) => {
       let array = this.state.objArray;
-      //get from api
-      let objIndex = array.find((e) => e.id === idToUpdate);
-      this.setState({rowData: objIndex});
+      let objIndex = array.find((e) => e.id == idToUpdate);
+      let newRowData = {
+        nameData: objIndex.name,
+        speedData: objIndex.speed,
+        minCrewData: objIndex.minCrew,
+        lengthData: objIndex.length,
+        passengersData: objIndex.passengers
+      }
+      this.setState({
+        rowData: newRowData,
+        idOfEdit: idToUpdate
+      });
+ 
+    }
+
+    this.setRowData = (rowDataObj) => {
+      this.setState({ rowData: rowDataObj })
+    }
+    this.resetID = () => {
+      let id = { value: -1 }
+      this.setState({ idOfEdit: id })
     }
   }
 
   render() {
     return (
       <div className="App">
-        <Header/>
-        <Inputs parentHandle={this.handleSubmitInParent}/>
+        <Header />
+        <Inputs parentHandle={this.handleSubmitInParent} parentHandleUpdate={this.handleUpdateRowInParent} propRowData={this.state.rowData} setRowData={this.setRowData} id={this.state.idOfEdit} setID={this.resetID} />
         <Table
           tDataProp={this.state.objArray}
-          handleDeleteRowInParent={this.handleDeleteRowInParent} handleGetRowData={this.handleGetRowData}/>
+          handleDeleteRowInParent={this.handleDeleteRowInParent} handleGetRowData={this.handleGetRowData} />
       </div>
 
     );
@@ -96,7 +115,7 @@ class Header extends Component {
   render() {
     return (
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo"/>
+        <img src={logo} className="App-logo" alt="logo" />
         <h1 className="App-title">STAR WARS SHIP API</h1>
       </header>
     );
@@ -109,7 +128,7 @@ class Inputs extends Component {
     super(props);
 
     //Each form component will call this method to update the state
-    this.handleChange = (valueName) => (event) => this.setState({[valueName]: event.target.value});
+    this.handleChange = (valueName) => (event) => this.setState({ [valueName]: event.target.value });
 
     // Submit on the child form component will push all data in the state of the
     // child component up to the parent component
@@ -118,7 +137,15 @@ class Inputs extends Component {
       this
         .props
         .parentHandle(this.state);
-      this.setState({nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: ""});
+      this.props.setRowData({ nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "" });
+    }
+
+    this.handleUpdate = (e) => {
+      e.preventDefault();
+      this
+        .props
+        .parentHandleUpdate(this.state);
+      this.props.setRowData({ nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "" });
     }
     //Initialize state
     this.state = {
@@ -129,7 +156,13 @@ class Inputs extends Component {
       passengersData: ""
     };
   }
-
+  componentWillReceiveProps(nextProps) {   
+    // alert(); 
+    if (nextProps.id> -1) {
+      this.setState(this.props.propRowData);
+      this.props.setID();
+    }
+  }
   render() {
     return (
       <div>
@@ -169,7 +202,7 @@ class Inputs extends Component {
           onChange={this.handleChange("passengersData")}></input>
         <br></br>
         <input type="button" onClick={this.handleSubmit} value="Create"></input>
-        <input type="button" onClick="updateShip()" value="Update"></input>
+        <input type="button" onClick={this.handleUpdate} value="Update"></input>
         <br></br>
         <div id="idStore" value=""></div>
       </div>
@@ -215,7 +248,7 @@ class Table extends Component {
               length={ship.length}
               passengers={ship.passengers}
               handleDeleteRow={this.handleDeleteRow}
-              handleUpdateRow={this.handleUpdateRow}/>)
+              handleUpdateRow={this.handleUpdateRow} />)
           })}
       </tbody>
     )
