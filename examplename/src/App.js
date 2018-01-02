@@ -30,7 +30,8 @@ class App extends Component {
         speedData: "",
         minCrewData: "",
         lengthData: "",
-        passengersData: ""
+        passengersData: "",
+        id: ""
       },
       idOfEdit: { value: -1 }
     }
@@ -66,7 +67,7 @@ class App extends Component {
         length: dataFromForm.lengthData,
         passengers: dataFromForm.passengersData
       }
-      array.splice(objIndex, 1);
+      array.splice(idToUpdate, 1, replacementObj);
       this.setState({ objArray: array });
       //update api
     }
@@ -79,7 +80,8 @@ class App extends Component {
         speedData: objIndex.speed,
         minCrewData: objIndex.minCrew,
         lengthData: objIndex.length,
-        passengersData: objIndex.passengers
+        passengersData: objIndex.passengers,
+        id: idToUpdate
       }
       this.setState({
         rowData: newRowData,
@@ -101,7 +103,7 @@ class App extends Component {
     return (
       <div className="App">
         <Header />
-        <Inputs parentHandle={this.handleSubmitInParent} parentHandleUpdate={this.handleUpdateRowInParent} propRowData={this.state.rowData} setRowData={this.setRowData} id={this.state.idOfEdit} setID={this.resetID} />
+        <Inputs parentHandle={this.handleSubmitInParent} parentHandleUpdate={this.handleUpdateRowInParent} propRowData={this.state.rowData} setRowData={this.setRowData} id={this.state.idOfEdit} setID={this.resetID}/>
         <Table
           tDataProp={this.state.objArray}
           handleDeleteRowInParent={this.handleDeleteRowInParent} handleGetRowData={this.handleGetRowData} />
@@ -126,7 +128,7 @@ class Inputs extends Component {
 
   constructor(props) {
     super(props);
-
+    let updateDisabled = true;
     //Each form component will call this method to update the state
     this.handleChange = (valueName) => (event) => this.setState({ [valueName]: event.target.value });
 
@@ -137,15 +139,17 @@ class Inputs extends Component {
       this
         .props
         .parentHandle(this.state);
-      this.props.setRowData({ nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "" });
+      this.props.setRowData({ nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "", id: ""});
     }
 
     this.handleUpdate = (e) => {
       e.preventDefault();
+      let id = this.props.propRowData.id;
       this
         .props
-        .parentHandleUpdate(this.state);
-      this.props.setRowData({ nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "" });
+        .parentHandleUpdate(this.state.id, this.state);
+      this.props.setRowData({ nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "", id: ""});
+
     }
     //Initialize state
     this.state = {
@@ -153,13 +157,15 @@ class Inputs extends Component {
       speedData: "",
       minCrewData: "",
       lengthData: "",
-      passengersData: ""
+      passengersData: "",
+      id: ""
     };
   }
   componentWillReceiveProps(nextProps) {   
     // alert(); 
     if (nextProps.id> -1) {
       this.setState(this.props.propRowData);
+      this.updateDisabled = false;
       this.props.setID();
     }
   }
@@ -202,9 +208,9 @@ class Inputs extends Component {
           onChange={this.handleChange("passengersData")}></input>
         <br></br>
         <input type="button" onClick={this.handleSubmit} value="Create"></input>
-        <input type="button" onClick={this.handleUpdate} value="Update"></input>
+        <input type="button" onClick={this.handleUpdate} disabled={this.updateDisabled} value="Update"></input>
         <br></br>
-        <div id="idStore" value=""></div>
+        <div id="idStore" value={this.state.id}></div>
       </div>
     );
   };
