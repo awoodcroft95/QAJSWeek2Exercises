@@ -87,7 +87,7 @@ class App extends Component {
         rowData: newRowData,
         idOfEdit: idToUpdate
       });
- 
+
     }
 
     this.setRowData = (rowDataObj) => {
@@ -103,7 +103,7 @@ class App extends Component {
     return (
       <div className="App">
         <Header />
-        <Inputs parentHandle={this.handleSubmitInParent} parentHandleUpdate={this.handleUpdateRowInParent} propRowData={this.state.rowData} setRowData={this.setRowData} id={this.state.idOfEdit} setID={this.resetID}/>
+        <Inputs parentHandle={this.handleSubmitInParent} parentHandleUpdate={this.handleUpdateRowInParent} propRowData={this.state.rowData} setRowData={this.setRowData} id={this.state.idOfEdit} setID={this.resetID} />
         <Table
           tDataProp={this.state.objArray}
           handleDeleteRowInParent={this.handleDeleteRowInParent} handleGetRowData={this.handleGetRowData} />
@@ -139,7 +139,7 @@ class Inputs extends Component {
       this
         .props
         .parentHandle(this.state);
-      this.props.setRowData({ nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "", id: ""});
+      this.props.setRowData({ nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "", id: "" });
     }
 
     this.handleUpdate = (e) => {
@@ -148,7 +148,7 @@ class Inputs extends Component {
       this
         .props
         .parentHandleUpdate(this.state.id, this.state);
-      this.props.setRowData({ nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "", id: ""});
+      this.props.setRowData({ nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "", id: "" });
 
     }
     //Initialize state
@@ -161,9 +161,9 @@ class Inputs extends Component {
       id: ""
     };
   }
-  componentWillReceiveProps(nextProps) {   
+  componentWillReceiveProps(nextProps) {
     // alert(); 
-    if (nextProps.id> -1) {
+    if (nextProps.id > -1) {
       this.setState(this.props.propRowData);
       this.updateDisabled = false;
       this.props.setID();
@@ -259,11 +259,11 @@ class Table extends Component {
       </tbody>
     )
     return (
-      <div class="animate-bottom">
+      <div className="animate-bottom">
+        <h2>Ships</h2>
         <table id="shipTable">
-          <h2>Ships</h2>
-          <table>
-            <thead>
+          <thead>
+            <tr>
               <th>Delete</th>
               <th>Name</th>
               <th>Speed</th>
@@ -271,9 +271,9 @@ class Table extends Component {
               <th>Length</th>
               <th>Passengers</th>
               <th>Update</th>
-            </thead>
-            {ships}
-          </table>
+            </tr>
+          </thead>
+          {ships}
         </table>
       </div>
     );
