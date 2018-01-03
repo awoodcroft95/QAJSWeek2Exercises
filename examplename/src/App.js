@@ -149,7 +149,7 @@ class Inputs extends Component {
         .props
         .parentHandleUpdate(this.state.id, this.state);
       this.props.setRowData({ nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "", id: "" });
-
+      this.updateDisabled = true;
     }
     //Initialize state
     this.state = {
