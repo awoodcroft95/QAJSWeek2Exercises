@@ -2,13 +2,15 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const open = require("open");
 
+const cors = require("cors");
 const app = express();
-const port = process.env.port || 3000;
+const port = process.env.port || 3001;
 const router = express.Router();
 
 //Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors({origin:"*"}));
 
 //Routing
 app.use("/", router);
@@ -76,7 +78,7 @@ router.delete("/api/ship/:id", (req, res) => {
 //mock data
 const ships = [
     {
-        id: 1,
+        id: 0,
         name: "Millennium Falcon",
         speed: 1050,
         minCrew: 1,
@@ -84,12 +86,20 @@ const ships = [
         passengers: 6
     },
     {
-        id: 2,
+        id: 1,
         name: "Ghost",
         speed: 1025,
         minCrew: 1,
         length: 43.9,
         passengers: 8
+    },
+    {
+        id: 2,
+        name: "X-Wing",
+        speed: 1050,
+        minCrew: 1,
+        length: 12,
+        passengers: 1
     }
 ]
 

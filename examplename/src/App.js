@@ -4,27 +4,13 @@ import './App.css';
 import ReactDOM from 'react-dom';
 import Ship from './Ship';
 
+const url = "http://localhost:3001/api/ship/";
+
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      objArray: [
-        {
-          id: 0,
-          name: "X-Wing",
-          speed: 1050,
-          minCrew: 1,
-          length: 12,
-          passengers: 1
-        }, {
-          id: 1,
-          name: "Millennium Falcon",
-          speed: 1050,
-          minCrew: 1,
-          length: 34.37,
-          passengers: 6
-        }
-      ],
+      objArray: [],
       rowData: {
         nameData: "",
         speedData: "",
@@ -34,6 +20,13 @@ class App extends Component {
         id: ""
       },
       idOfEdit: { value: -1 }
+    }
+
+    this.load = () => {
+      fetch(url)
+      .then((resp) => resp.json().then((data) => {
+        this.setState({ objArray: data });
+      }));
     }
 
     this.handleSubmitInParent = (dataFromForm) => {
@@ -54,11 +47,12 @@ class App extends Component {
       let objIndex = array.findIndex((e) => e.id === idToDelete);
       array.splice(objIndex, 1);
       this.setState({ objArray: array });
+      fetch(url+""+idToDelete);
     }
 
     this.handleUpdateRowInParent = (idToUpdate, dataFromForm) => {
       let array = this.state.objArray;
-      let objIndex = array.findIndex((e) => e.id === idToUpdate);
+      //let objIndex = array.findIndex((e) => e.id === idToUpdate);
       let replacementObj = {
         id: idToUpdate,
         name: dataFromForm.nameData,
@@ -97,6 +91,10 @@ class App extends Component {
       let id = { value: -1 }
       this.setState({ idOfEdit: id })
     }
+    
+  }
+  componentDidMount(){
+    this.load();
   }
 
   render() {
@@ -128,7 +126,7 @@ class Inputs extends Component {
 
   constructor(props) {
     super(props);
-    let updateDisabled = true;
+    this.setState({ updateDisabled: true });
     //Each form component will call this method to update the state
     this.handleChange = (valueName) => (event) => this.setState({ [valueName]: event.target.value });
 
@@ -144,12 +142,13 @@ class Inputs extends Component {
 
     this.handleUpdate = (e) => {
       e.preventDefault();
-      let id = this.props.propRowData.id;
+      //let id = this.props.propRowData.id;
       this
         .props
         .parentHandleUpdate(this.state.id, this.state);
       this.props.setRowData({ nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "", id: "" });
-      this.updateDisabled = true;
+      this.setState(this.props.setRowData);
+      this.setState({ updateDisabled: true });
     }
     //Initialize state
     this.state = {
@@ -158,14 +157,14 @@ class Inputs extends Component {
       minCrewData: "",
       lengthData: "",
       passengersData: "",
-      id: ""
+      id: "",
+      updateDisabled: true
     };
   }
   componentWillReceiveProps(nextProps) {
-    // alert(); 
     if (nextProps.id > -1) {
       this.setState(this.props.propRowData);
-      this.updateDisabled = false;
+      this.setState({ updateDisabled: false });
       this.props.setID();
     }
   }
@@ -208,14 +207,14 @@ class Inputs extends Component {
           onChange={this.handleChange("passengersData")}></input>
         <br></br>
         <input type="button" onClick={this.handleSubmit} value="Create"></input>
-        <input type="button" onClick={this.handleUpdate} disabled={this.updateDisabled} value="Update"></input>
+        <input type="button" onClick={this.handleUpdate} disabled={this.state.updateDisabled} value="Update" id="updateButton"></input>
         <br></br>
         <div id="idStore" value={this.state.id}></div>
       </div>
     );
   };
 }
-
+//={this.updateDisabled}
 class Table extends Component {
   constructor() {
     super();
@@ -242,7 +241,7 @@ class Table extends Component {
     let ships = null;
     ships = (
       <tbody id="shipDetails">
-        {this
+        {this 
           .props
           .tDataProp
           .map((ship, index) => {

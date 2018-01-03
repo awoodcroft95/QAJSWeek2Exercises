@@ -1,0 +1,28 @@
+{
+  "name": "QAJSWeek2Exercises",
+  "version": "1.0.0",
+  "description": "",
+  "main": "apiServer.js",
+  "scripts": {
+    "start": "node apiServer.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awoodcroft95/QAJSWeek2Exercises.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/awoodcroft95/QAJSWeek2Exercises/issues"
+  },
+  "homepage": "https://github.com/awoodcroft95/QAJSWeek2Exercises#readme",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "expresss": "0.0.0",
+    "lodash": "^4.17.4",
+    "open": "0.0.5"
+  }
+}
