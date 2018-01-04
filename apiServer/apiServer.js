@@ -38,7 +38,7 @@ router.post("/api/ship/", (req, res) => {
     console.log(isValid);
     if (isValid) {
         ships.push(postShip);
-        res.send(postShip);
+        res.json(postShip);
     }
     else { res.sendStatus(500) }
 });
@@ -56,7 +56,8 @@ router.put("/api/ship/:id", (req, res) => {
             currentShip.minCrew = putShip.minCrew;
             currentShip.length = putShip.length;
             currentShip.passengers = putShip.passengers;
-            res.sendStatus(204);
+            //res.sendStatus(204);
+            res.json(currentShip);
         }
         else { res.sendStatus(404); }
     }
@@ -68,7 +69,8 @@ router.delete("/api/ship/:id", (req, res) => {
     const currentShip = ships.findIndex((ship) => ship.id == shipID);
     if (currentShip !== -1) {
         ships.splice(currentShip, 1);
-        res.sendStatus(204);
+        //res.sendStatus(204);
+        res.json(currentShip);
     }
     else {
         res.sendStatus(404);

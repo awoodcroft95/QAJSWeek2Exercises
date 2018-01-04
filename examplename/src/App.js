@@ -3,6 +3,7 @@ import logo from './Redstarbird.png';
 import './App.css';
 import ReactDOM from 'react-dom';
 import Ship from './Ship';
+import { create } from 'domain';
 
 const url = "http://localhost:3001/api/ship/";
 
@@ -22,24 +23,38 @@ class App extends Component {
       idOfEdit: { value: -1 }
     }
 
+    this.onSuccess = (response) => {
+      return response.json();
+    };
+    this.onError = (error) => {
+      console.log(error);
+    };
+
     this.load = () => {
       fetch(url)
-      .then((resp) => resp.json().then((data) => {
-        this.setState({ objArray: data });
-      }));
+        .then((resp) => resp.json().then((data) => {
+          this.setState({ objArray: data });
+        }));
     }
 
     this.handleSubmitInParent = (dataFromForm) => {
       let array = this.state.objArray;
-      array.push({
+      let newObject = {
         id: array.length,
         name: dataFromForm.nameData,
         speed: dataFromForm.speedData,
         minCrew: dataFromForm.minCrewData,
         length: dataFromForm.lengthData,
         passengers: dataFromForm.passengersData
+      };
+      const request = new Request(url, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newObject)
       });
-      this.setState({ array });
+      return fetch(request).then(this.onSuccess, this.onError).then(this.load,this.forceUpdate);
     }
 
     this.handleDeleteRowInParent = (idToDelete) => {
@@ -47,12 +62,13 @@ class App extends Component {
       let objIndex = array.findIndex((e) => e.id === idToDelete);
       array.splice(objIndex, 1);
       this.setState({ objArray: array });
-      fetch(url+""+idToDelete);
+      const request = new Request(url + idToDelete, {
+        method: "DELETE"
+      });
+      return fetch(request).then(this.onSuccess, this.onError).then(this.load,this.forceUpdate);
     }
 
     this.handleUpdateRowInParent = (idToUpdate, dataFromForm) => {
-      let array = this.state.objArray;
-      //let objIndex = array.findIndex((e) => e.id === idToUpdate);
       let replacementObj = {
         id: idToUpdate,
         name: dataFromForm.nameData,
@@ -61,26 +77,30 @@ class App extends Component {
         length: dataFromForm.lengthData,
         passengers: dataFromForm.passengersData
       }
-      array.splice(idToUpdate, 1, replacementObj);
-      this.setState({ objArray: array });
-      //update api
+      const request = new Request(url + idToUpdate, {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(replacementObj)
+      });
+      return fetch(request).then(this.onSuccess, this.onError).then(this.load,this.forceUpdate);
     }
 
     this.handleGetRowData = (idToUpdate) => {
-      let array = this.state.objArray;
-      let objIndex = array.find((e) => e.id == idToUpdate);
-      let newRowData = {
-        nameData: objIndex.name,
-        speedData: objIndex.speed,
-        minCrewData: objIndex.minCrew,
-        lengthData: objIndex.length,
-        passengersData: objIndex.passengers,
-        id: idToUpdate
-      }
-      this.setState({
-        rowData: newRowData,
-        idOfEdit: idToUpdate
-      });
+      //let array = this.state.objArray;
+      //let objIndex = array.find((e) => e.id == idToUpdate);
+      // let newRowData = {
+      //   nameData: objIndex.name,
+      //   speedData: objIndex.speed,
+      //   minCrewData: objIndex.minCrew,
+      //   lengthData: objIndex.length,
+      //   passengersData: objIndex.passengers,
+      //   id: idToUpdate
+      // }
+      console.log(idToUpdate);
+      this.setState({ idOfEdit: idToUpdate });
+      console.log(this.state.idOfEdit);
 
     }
 
@@ -91,9 +111,9 @@ class App extends Component {
       let id = { value: -1 }
       this.setState({ idOfEdit: id })
     }
-    
+
   }
-  componentDidMount(){
+  componentDidMount() {
     this.load();
   }
 
@@ -106,7 +126,6 @@ class App extends Component {
           tDataProp={this.state.objArray}
           handleDeleteRowInParent={this.handleDeleteRowInParent} handleGetRowData={this.handleGetRowData} />
       </div>
-
     );
   }
 }
@@ -126,7 +145,7 @@ class Inputs extends Component {
 
   constructor(props) {
     super(props);
-    this.setState({ updateDisabled: true });
+    this.setState({ updateDisabled: true, createDisabled: false});
     //Each form component will call this method to update the state
     this.handleChange = (valueName) => (event) => this.setState({ [valueName]: event.target.value });
 
@@ -137,18 +156,24 @@ class Inputs extends Component {
       this
         .props
         .parentHandle(this.state);
-      this.props.setRowData({ nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "", id: "" });
+      const rowData = { nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "", id: "" };
+      //this.props.setRowData({ nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "", id: "" });
+      this.setState(rowData);
+      this.forceUpdate();
     }
 
     this.handleUpdate = (e) => {
       e.preventDefault();
       //let id = this.props.propRowData.id;
+      console.log(this.state.id);
       this
         .props
-        .parentHandleUpdate(this.state.id, this.state);
-      this.props.setRowData({ nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "", id: "" });
-      this.setState(this.props.setRowData);
-      this.setState({ updateDisabled: true });
+        .parentHandleUpdate(this.props.id, this.state);
+      const rowData = { nameData: "", speedData: "", minCrewData: "", lengthData: "", passengersData: "", id: "" };
+      //this.props.setRowData(rowData);
+      this.setState(rowData);
+      this.setState({ updateDisabled: true, createDisabled : false });
+      this.forceUpdate();
     }
     //Initialize state
     this.state = {
@@ -158,14 +183,16 @@ class Inputs extends Component {
       lengthData: "",
       passengersData: "",
       id: "",
-      updateDisabled: true
+      updateDisabled: true,
+      createDisabled: false
     };
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.id > -1) {
       this.setState(this.props.propRowData);
-      this.setState({ updateDisabled: false });
-      this.props.setID();
+      this.setState({ updateDisabled: false, createDisabled: true });
+      //this.props.setID();
+      this.forceUpdate();
     }
   }
   render() {
@@ -206,15 +233,15 @@ class Inputs extends Component {
           value={this.state.passengersData}
           onChange={this.handleChange("passengersData")}></input>
         <br></br>
-        <input type="button" onClick={this.handleSubmit} value="Create"></input>
+        <input type="button" onClick={this.handleSubmit} disabled={this.state.createDisabled} value="Create"></input>
         <input type="button" onClick={this.handleUpdate} disabled={this.state.updateDisabled} value="Update" id="updateButton"></input>
         <br></br>
-        <div id="idStore" value={this.state.id}></div>
+        {/* <div id="idStore" value={this.state.id}></div> */}
       </div>
     );
   };
 }
-//={this.updateDisabled}
+
 class Table extends Component {
   constructor() {
     super();
@@ -234,6 +261,7 @@ class Table extends Component {
       this
         .props
         .handleGetRowData(eventAtID);
+        console.log(eventAtID);
     }
 
   }
@@ -241,7 +269,7 @@ class Table extends Component {
     let ships = null;
     ships = (
       <tbody id="shipDetails">
-        {this 
+        {this
           .props
           .tDataProp
           .map((ship, index) => {

@@ -10,7 +10,10 @@ const ship = (props) => {
                 <td>{props.minCrew}</td>
                 <td>{props.length}</td>
                 <td>{props.passengers}</td>
+                
                 <td> <button value={props.id} className="updateShip" onClick={handleUpdateRow}> U </button> </td>
+                <td>{props.id}</td>
+                
             </tr>
     )
 }
