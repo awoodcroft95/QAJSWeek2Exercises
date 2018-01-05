@@ -5,7 +5,7 @@ import Table from './components/Table';
 import Footer from './components/Footer';
 import Header from './components/Header';
 
-const url = "http://localhost:3001/api/ship/";
+const url = "http://192.168.1.118:3001/api/ship/";
 
 class App extends Component {
   constructor() {
