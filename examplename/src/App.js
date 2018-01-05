@@ -88,21 +88,7 @@ class App extends Component {
     }
 
     this.handleGetRowData = (idToUpdate) => {
-      // let array = this.state.objArray;
-      // let objIndex = array.find((e) => e.id == idToUpdate);
-      // let newRowData = {
-      //   nameData: objIndex.name,
-      //   speedData: objIndex.speed,
-      //   minCrewData: objIndex.minCrew,
-      //   lengthData: objIndex.length,
-      //   passengersData: objIndex.passengers,
-      //   id: idToUpdate
-      // }
-      console.log(idToUpdate);
-      //this.setState({rowData: newRowData});
       this.setState({ idOfEdit: idToUpdate });
-      console.log(this.state.idOfEdit);
-
     }
 
     this.setRowData = (rowDataObj) => {
