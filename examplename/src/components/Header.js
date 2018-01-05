@@ -7,6 +7,7 @@ import music2 from '../media/DuelOfTheFates.mp3';
 import logo3 from '../media/JediLogo.png';
 
 class Header extends Component {
+    
     constructor() {
         super();
 
